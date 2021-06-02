@@ -100,7 +100,6 @@ public class ProjectDAOimpl implements ProjectDAO {
 				String name = rs.getString("name");
 				String hp = rs.getString("hp");
 				String tel = rs.getString("tel");
-				
 				ProjectVO vo = new ProjectVO(id, name, hp, tel);
 				list.add(vo);
 			}
