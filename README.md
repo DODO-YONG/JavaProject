@@ -1,3 +1,3 @@
 # JavaProject
-JavaProject in BitCampus;
+Mini-JavaProject in BitCampus;
 
