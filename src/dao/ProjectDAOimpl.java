@@ -41,19 +41,20 @@ public class ProjectDAOimpl implements ProjectDAO {
 			stmt = conn.createStatement();
 			
 			//	쿼리
-			String sql = "select name, hp, tel " +
+			String sql = "select id, name, hp, tel " +
 						"from phone_book";
 			//	쿼리 실행
 			rs = stmt.executeQuery(sql);
 			
 			// ResultSet -> JAVA 객체로 변환
 			while(rs.next()) {
-				String name = rs.getString(1);
-				String hp = rs.getString(2);
-				String tel = rs.getString(3);
+				Long id = rs.getLong(1);
+				String name = rs.getString(2);
+				String hp = rs.getString(3);
+				String tel = rs.getString(4);
 				
 				// DTO객체
-				ProjectVO vo = new ProjectVO(name, hp, tel);
+				ProjectVO vo = new ProjectVO(id, name, hp, tel);
 				//	DTO 객체 -> list 추가
 				list.add(vo);
 			}
@@ -74,8 +75,47 @@ public class ProjectDAOimpl implements ProjectDAO {
 
 	@Override
 	public List<ProjectVO> search(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		
+		List<ProjectVO> list = new ArrayList<>();
+		
+		String sql = "SELECT id, name, hp, tel " +
+					"FROM phone_book " +
+					"WHERE name LIKE ?";
+		try {
+			conn = getConnection();
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, "%" + keyword + "%");
+			
+			//	쿼리 수행
+			rs = pstmt.executeQuery();
+			
+			//	변환
+			
+			while(rs.next()) {
+				Long id = rs.getLong("id");
+				String name = rs.getString("name");
+				String hp = rs.getString("hp");
+				String tel = rs.getString("tel");
+				
+				ProjectVO vo = new ProjectVO(id, name, hp, tel);
+				list.add(vo);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				rs.close();
+				pstmt.close();
+				conn.close();
+			} catch (Exception e) {
+				
+			}
+		}
+		return list;
 	}
 
 	@Override
@@ -118,9 +158,32 @@ public class ProjectDAOimpl implements ProjectDAO {
 	}
 
 	@Override
-	public boolean delete(String name) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean delete(Long id) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		int deletedCount = 0;
+		
+		
+		try {
+			conn = getConnection();
+			String sql = "DELETE FROM phone_book " +
+						"WHERE id=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			
+			deletedCount = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+				conn.close();
+			} catch (Exception e) {
+				
+			}
+		}
+		
+		return 1 == deletedCount;
 	}
 
 	

@@ -4,14 +4,17 @@ package dao;
 //반드시 기본 생성자가 있어야함
 //일반적으로 로직 메서드는 작성하지 않는다.
 public class ProjectVO {
+	private Long id;
 	private String name;
 	private String hp;
 	private String tel;
 	
 	//	생성자
-	public ProjectVO(String name,
+	public ProjectVO(Long id,
+				String name,
 				String hp,
 				String tel) {
+		this.id = id;
 		this.name = name;
 		this.hp = hp;
 		this.tel = tel;		
@@ -25,6 +28,9 @@ public class ProjectVO {
 	public String getTel() {
 		return tel;
 	}
+	public Long getId() {
+		return id;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -34,9 +40,13 @@ public class ProjectVO {
 	public void setTel(String tel) {
 		this.tel = tel;
 	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	@Override
 	public String toString() {
-		return "ProjectVO [name=" + name + ", hp=" + hp + ", tel=" + tel + "]";
+		return "ProjectVO [id=" + id + ",name=" + name + ", hp=" + hp + ", tel=" + tel + "]";
 	}
 	
 
